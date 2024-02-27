@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Expense Tracker - Login</title>
+</head>
+<body>
+    <div id="login">
+        <div class="bckgrd-container"></div>
+        
+        <div id="login-container">
+            <h2>Login</h2>
+            <form id="login-form">
+                <label for="login-username">Username:</label>
+                <input type="text" id="login-username" required>
+
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" required>
+
+                <button type="button">Login</button>
+            </form>
+
+            <p>Don't have an account? <a href="signup.html">Sign up here</a>.</p>
+        </div>
+    </div>
+
+    <!-- <script>
+        function login() {
+            const usernameInput = document.getElementById('login-username');
+            const passwordInput = document.getElementById('login-password');
+
+            // Validate inputs
+            if (!usernameInput.value || !passwordInput.value) {
+                alert('Please enter both username and password.');
+                return;
+            }
+
+            // Simulate user authentication (in a real app, this would involve server-side logic)
+            alert(`User ${usernameInput.value} logged in successfully!`);
+
+            // Redirect to main expense tracker page
+            window.location.href = 'expense_tracker.html';
+        }
+    </script> -->
+</body>
+</html>

@@ -1,0 +1,1 @@
+A simple expense tracker to track expenses and personal budget which can be edited at anytime.
