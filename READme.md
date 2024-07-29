@@ -59,9 +59,10 @@ Follow these steps to set up and run the project locally:
     
 3.  npm install
     
-4.  Create a .env file in the root directory with the following content:envCopy codeDB\_HOST=localhostDB\_USER=your\_db\_userDB\_PASS=your\_db\_passwordDB\_NAME=my\_expense\_trackerSESSION\_SECRET=your\_session\_secret
+4.  Create a .env file in the root directory with the following content:
+codeDB\_HOST=localhostDB\_USER=your\_db\_userDB\_PASS=your\_db\_passwordDB\_NAME=my\_expense\_trackerSESSION\_SECRET=your\_session\_secret
     
-5.  Ensure your database is running, then execute:bashCopy codenpx sequelize-cli db:migrate
+5.  Ensure your database is running, then execute: npx sequelize-cli db:migrate
     
 6.  npm startThe application will be accessible at http://localhost:3000.
     
