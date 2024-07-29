@@ -1,1 +1,2 @@
 A simple expense tracker to track expenses and personal budget which can be edited at anytime.
+These are the different pages for this app - login, register, addExpense, expenseTracker, editExpense, & profile.
