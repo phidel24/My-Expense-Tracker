@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Expense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <link href="/css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div id="expense-container">
+        <h2>Edit Expense</h2>
+        <form id="expense-form" action="/expenses/edit/<%= expense.id %>" method="post">
+            <label for="expense-name">Expense Title:</label>
+            <input type="text" id="expense-name" name="title" value="<%= expense.title %>" required>
+            
+            <label for="expense-amount">Amount:</label>
+            <input type="number" id="expense-amount" name="amount" value="<%= expense.amount %>" required>
+            
+            <label for="expense-category">Category:</label>
+            <select id="expense-category" name="categoryId" required class="select-cat">
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.id %>" <%= category.id == expense.categoryId ? 'selected' : '' %>><%= category.name %></option>
+                <% }); %>
+            </select>
+            
+            <label for="expense-descr">Description:</label>
+            <textarea id="expense-descr" class="edit-input-descr" name="description" maxlength="500" required><%= expense.description %></textarea>
+            
+            <div id="create-expense-div">
+                <button type="submit" id="left">Update Expense</button>
+                <button type="button" id="right"><a href="/expenses" id="back-to-expenses-btn">Back</a></button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

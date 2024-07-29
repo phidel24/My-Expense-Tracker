@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="/css/styles.css" rel="stylesheet" type="text/css">
+    <title>Expense Tracker - Add Expense</title>
+</head>
+<body>
+    <div id="expense-container">
+        <h2>Add New Expense</h2>
+        <!-- <form id="expense-form" action="/addExpense" method="post"> -->
+        <form id="expense-form" action="/expenses/add" method="post">
+
+            <label for="expense-name">Expense Title:</label>
+            <input type="text" id="expense-name" name="title" required>
+            
+            <label for="expense-amount">Amount:</label>
+            <input type="text" id="expense-amount" name="amount" required>
+            
+            <input type="hidden" name="userId" value="<%= userId %>" >
+            
+            <label for="expense-category">Category:</label>
+            <select id="expense-category" required class="select-cat" name="categoryId">
+                <option value="" disabled selected>Select a Category</option>
+                <% categories.forEach(category => { %>
+                    <option value="<%= category.id %>"><%= category.name %></option>
+                <% }); %>
+                <option value="addNewCategory">Add New Category</option>
+            </select>
+
+            <div id="new-category" style="display: none;">
+                <label for="new-category-input">New Category:</label> 
+                <input type="text" id="new-category-input" name="category" >
+            </div>
+
+            <label for="expense-descr">Description:</label>
+            <input id="expense-descr" type="text" name="description" maxlength="500" required>
+            
+            <div id="create-expense-div">
+                <button type="submit" id="left">Create Expense</button>
+                <button type="button" id="right"><a href="/expenses" id="back-to-expenses-btn" >Back</a></button>
+            </div>
+
+        </form>
+        <div id="successMessage" style="display:none;color:green;text-align:center;font-weight:bold;">Expense added successfully!</div>
+    </div>
+</body>
+<script>
+    document.getElementById('expense-category').addEventListener('change', function() {
+        if (this.value === 'addNewCategory') {
+            document.getElementById('new-category').style.display = 'block';
+        } else {
+            document.getElementById('new-category').style.display = 'none';
+        }
+    }); 
+
+    $(document).ready(function() {
+        $('#expense-form').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: '/expenses/add',
+                method: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('#successMessage').show().delay(2000).fadeOut();
+                    setTimeout(function() {
+                        window.location.href = '/expenses';
+                    }, 2000);
+                },
+                error: function(error) {
+                    alert('Error adding expense. Please try again.');
+                    console.error('Error:', error);
+                }
+            });
+        });
+    });
+</script>
+</html>
