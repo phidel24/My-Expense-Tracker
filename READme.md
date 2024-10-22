@@ -64,7 +64,7 @@ codeDB\_HOST=localhostDB\_USER=your\_db\_userDB\_PASS=your\_db\_passwordDB\_NAME
     
 5.  Ensure your database is running, then execute: npx sequelize-cli db:migrate
     
-6.  npm startThe application will be accessible at http://localhost:3000.
+6.  npm start - The application will be accessible at http://localhost:3000.
     
 
 Usage

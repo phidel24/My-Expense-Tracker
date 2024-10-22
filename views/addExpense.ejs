@@ -9,42 +9,43 @@
 </head>
 <body>
     <div id="expense-container">
-        <h2>Add New Expense</h2>
-        <!-- <form id="expense-form" action="/addExpense" method="post"> -->
-        <form id="expense-form" action="/expenses/add" method="post">
+        <header>
+            <h2>Add New Expense</h2>
+        </header>
 
-            <label for="expense-name">Expense Title:</label>
-            <input type="text" id="expense-name" name="title" required>
-            
-            <label for="expense-amount">Amount:</label>
-            <input type="text" id="expense-amount" name="amount" required>
-            
-            <input type="hidden" name="userId" value="<%= userId %>" >
-            
-            <label for="expense-category">Category:</label>
-            <select id="expense-category" required class="select-cat" name="categoryId">
-                <option value="" disabled selected>Select a Category</option>
-                <% categories.forEach(category => { %>
-                    <option value="<%= category.id %>"><%= category.name %></option>
-                <% }); %>
-                <option value="addNewCategory">Add New Category</option>
-            </select>
-
-            <div id="new-category" style="display: none;">
-                <label for="new-category-input">New Category:</label> 
-                <input type="text" id="new-category-input" name="category" >
-            </div>
-
-            <label for="expense-descr">Description:</label>
-            <input id="expense-descr" type="text" name="description" maxlength="500" required>
-            
-            <div id="create-expense-div">
-                <button type="submit" id="left">Create Expense</button>
-                <button type="button" id="right"><a href="/expenses" id="back-to-expenses-btn" >Back</a></button>
-            </div>
-
-        </form>
-        <div id="successMessage" style="display:none;color:green;text-align:center;font-weight:bold;">Expense added successfully!</div>
+        <main>
+            <form id="expense-form" action="/expenses/add" method="post">
+                <label for="expense-name">Expense Title:</label>
+                <input type="text" id="expense-name" name="title" required>
+                
+                <label for="expense-amount">Amount:</label>
+                <input type="text" id="expense-amount" name="amount" required>
+                
+                <input type="hidden" name="userId" value="<%= userId %>" >
+                
+                <label for="expense-category">Category:</label>
+                <select id="expense-category" required class="select-cat" name="categoryId">
+                    <option value="" disabled selected>Select a Category</option>
+                    <% categories.forEach(category => { %>
+                        <option value="<%= category.id %>"><%= category.name %></option>
+                    <% }); %>
+                    <option value="addNewCategory">Add New Category</option>
+                </select>
+    
+                <div id="new-category" style="display: none;">
+                    <label for="new-category-input">New Category:</label> 
+                    <input type="text" id="new-category-input" name="category" >
+                </div>
+    
+                <label for="expense-descr">Description:</label>
+                <input id="expense-descr" type="text" name="description" maxlength="500" required>
+                
+                <div id="create-expense-div">
+                    <button type="submit" id="left">Create Expense</button>
+                    <button type="button" id="right"><a href="/expenses" id="back-to-expenses-btn" >Back</a></button>
+                </div>
+            </form>
+        </main>
     </div>
 </body>
 <script>
@@ -64,7 +65,14 @@
                 method: 'POST',
                 data: $(this).serialize(),
                 success: function(response) {
-                    $('#successMessage').show().delay(2000).fadeOut();
+                    if ($('.successMsg').length === 0) {
+                        $('<div class="successMsg">Expense added successfully!</div>')
+                        .appendTo('body')
+                        .css({
+                            display: 'none'
+                        });
+                    }
+                    $('.successMsg').show().delay(2000).fadeOut();
                     setTimeout(function() {
                         window.location.href = '/expenses';
                     }, 2000);
