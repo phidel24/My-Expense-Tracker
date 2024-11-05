@@ -9,24 +9,47 @@ body {
     height: 100vh;
     background-color: #f4f4f4;
 }
+
+.success-message, .successMsg, .errorMsg, .error-msg {
+    text-align: center;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+}
+
 .success-message {
     color: green;
-    text-align: center;
-    font-weight: bold;
     margin-top: 20px;
 }
+
 .successMsg {
     color: green;
-    text-align: center;
-    font-weight: bold;
     display: none;
     margin: 10px 0;
     padding: 10px;
     border: 1px solid green;
-    border-radius: 5px;
     background-color: #d4edda;
 }
+.error-message {
+    font-size: 10px;
+}
 
+.errorMsg, .error-msg {
+    color: red;
+    padding: 10px;
+    border: 1px solid red;
+    margin-bottom: 15px;
+    background-color: #f6afa2;
+}
+
+.error-msg {
+    transition: opacity 0.5s ease;
+    opacity: 1;
+}
+
+.error-msg.hide {
+    opacity: 0;
+}
 
 /* Add Expense */
 #expense-container, #signup-container, #login-container, #exp-tracker-container {
@@ -71,8 +94,11 @@ h1 {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    height: 30px;
     box-shadow: 0.2px 0.2px;
+}
+
+#expense-container input {
+    height: 30px;
 }
 
 #expense-form #expense-category {
@@ -150,11 +176,17 @@ footer.footer {
 .bckgrd-container {
     background-image: url('../images/stock.jpeg');
     background-repeat: no-repeat;
+    background-size: cover;
     width: 55%;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    min-height: 470px;
  }
 
+ #login-form button {
+    margin-top: 40px;
+ }
+ 
  #login-signup-link {
     text-align: center;
  }

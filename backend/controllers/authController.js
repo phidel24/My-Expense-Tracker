@@ -1,53 +1,96 @@
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const { body, validationResult } = require('express-validator');
 const sequelize = require('../database/models');
 const User = sequelize.models.User;
 
-async function userSignup (req, res) {
+const signupValidationRules = [
+    body('username')
+        .trim()
+        .isLength({ min: 3, max: 20 })
+        .withMessage('Username must be between 3 and 20 characters.'),
+    body('email')
+        .isEmail()
+        .withMessage('Please enter a valid email address.'),
+    body('password')
+        .isLength({ min: 6 })
+        .withMessage('Password must be at least 6 characters long.')
+];
+
+async function userSignup(req, res) {
     const { username, email, password } = req.body;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        const formattedErrors = errors.array();
+        console.log("Validation errors found:", formattedErrors);
+        return res.status(400).json({ errors: formattedErrors });
+    }
 
     try {
-        const existingUser = await User.findOne({ where: { username }})
+        const existingUser = await User.findOne({ where: { username } });
+        const existingEmail = await User.findOne({ where: { email } });
+
         if (existingUser) {
-            return res.status(400).send('Username exists!')
+            return res.status(400).json({ error: 'Username already exists.' }); // Sending a single error object
+        }
+        if (existingEmail) {
+            return res.status(400).json({ error: 'Email already exists.' }); // Sending a single error object
         }
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        await User.create({ username, email, password: hashedPassword });
+        const newUser = await User.create({ username, email, password: hashedPassword });
         
-        req.session.signupSuccess = true;                
-        res.redirect('/login');
+        res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Error signing up:', error);
+        res.status(500).json({ errors: [{ msg: 'Server error, please try again later.' }] });
     }
-};
+}
 
-async function userLogin (req, res) {
+const loginValidationRules = [
+    body('username')
+        .trim()
+        .notEmpty()
+        .withMessage('Username is required.'),
+    body('password')
+        .trim()
+        .notEmpty()
+        .withMessage('Password is required.')
+];
+
+const userLogin = async (req, res) => {
     const { username, password } = req.body;
-    
+    console.log("Login attempt:", username, password);
+
     try {
         const user = await User.findOne({ where: { username } });
         if (!user) {
-            return res.status(404).send('User not found');
+            console.log("User not found");
+            return res.status(401).json({ error: "User not found" });
         }
-        const validPassword = await bcrypt.compare(password, user.password);
-        if (!validPassword) {
-            return res.status(401).send('Invalid password');
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            console.log("Incorrect password");
+            return res.status(401).json({ error: "Incorrect password" });
         }
-        req.session.user = {
-            id: user.id,
-            username: user.username,
-            email: user.email
-        };
-        res.redirect('/expenses');
+
+        // Store userId and user object in session
+        req.session.userId = user.id;  
+        req.session.user = { id: user.id, username: user.username, email: user.email }; // Store necessary user info
+
+        console.log("Login successful");
+        return res.json({ message: "Login successful" });
+
     } catch (error) {
-        console.error('Error logging in:', error);
-        res.status(500).send('Internal Server Error');
+        console.error("Login error:", error);
+        return res.status(500).json({ error: "Server error" });
     }
 };
 
-function userLogout (req, res) {
+function userLogout(req, res) {
+    req.session.destroy();
     res.status(200).send('Logout successful');
 };
 
-module.exports = { userLogin, userSignup, userLogout }
+module.exports = { userLogin, userSignup, userLogout, signupValidationRules, loginValidationRules };

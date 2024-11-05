@@ -8,6 +8,13 @@
 <body>
     <div id="expense-container">
         <h2>Edit Expense</h2>
+
+        <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+            <div class="error-msg" style="margin-bottom: 10px;">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+
         <form id="expense-form" action="/expenses/edit/<%= expense.id %>" method="post">
             <label for="expense-name">Expense Title:</label>
             <input type="text" id="expense-name" name="title" value="<%= expense.title %>" required>
@@ -32,4 +39,15 @@
         </form>
     </div>
 </body>
+<script>
+    const errorMessage = document.getElementsByClassName('error-msg');
+    if (errorMessage) {
+        setTimeout(() => {
+            errorMessage.classList.add('hide');
+            setTimeout(()=> {
+                errorMessage.style.display = 'none'; 
+            }, 600)
+        }, 4000);
+    }
+</script>
 </html>

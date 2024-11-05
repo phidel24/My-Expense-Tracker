@@ -61,14 +61,28 @@ router.get('/edit/:id', async (req, res) => {
 
 // Update expense route
 router.post('/edit/:id', async (req, res) => {
+    const expenseId = req.params.id;
+    const { title, amount, categoryId, description } = req.body;
+    
     try {
-        const expenseId = req.params.id;
-        const { title, amount, categoryId, description } = req.body;
         await updateExpense(expenseId, title, amount, categoryId, description);
         res.redirect('/expenses?message=Expense updated successfully!');
     } catch (error) {
         console.error('Error updating expense:', error);
-        res.status(500).send('Internal Server Error');
+
+        try {
+            const expense = await getExpenseById(expenseId); 
+            const categories = await getCategories();
+            
+            res.render('editExpense', { 
+                expense, 
+                categories, 
+                errorMessage: error.message
+            });
+        } catch (fetchError) {
+            console.error('Error fetching expense or categories:', fetchError);
+            res.status(500).send('Internal Server Error');
+        }
     }
 });
 

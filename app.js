@@ -1,6 +1,9 @@
+require('dotenv').config();
+console.log("Session secret:", process.env.SESSION_SECRET);
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const path = require('path');
 const sequelize = require('./backend/database/models/index');
 const authRoutes = require('./routes/auth.route');
@@ -10,10 +13,15 @@ const getUsers = require('./backend/services/user.service');
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-    secret: 'no longer a secret', 
+    store: new SequelizeStore({
+      db: sequelize
+    }),
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
-}));
+    saveUninitialized: false,
+    // cookie: { secure: process.env.NODE_ENV === 'production' }
+    cookie: { secure: false }
+  }));
 
 app.use(express.static('public'));
 app.set('views', path.join(__dirname, 'views'));

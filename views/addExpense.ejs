@@ -74,10 +74,17 @@
                         window.location.href = '/expenses';
                     }, 2000);
                 },
-                error: function(error) {
+                error: function(xhr) {
+                const response = xhr.responseJSON;
+                if (response && response.message) {
+                    if ($('.errorMsg').length === 0) {
+                        $('<div class="errorMsg"></div>').appendTo('#expense-container')
+                    }
+                    $('.errorMsg').text(response.message).show().delay(4000).fadeOut();
+                } else {
                     alert('Error adding expense. Please try again.');
-                    console.error('Error:', error);
                 }
+            }
             });
         });
     });

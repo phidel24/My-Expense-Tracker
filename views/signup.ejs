@@ -15,17 +15,71 @@
             <form id="signup-form" action="/auth/signup" method="post">
                 <label for="signup-username">Username:</label>
                 <input type="text" id="signup-username" name="username" required>
+                <div id="username-error" class="error-message" style="color: red;"></div>
 
-                <label for="signup-username">Email:</label>
+                <label for="signup-email">Email:</label>
                 <input type="text" id="signup-email" name="email" required>
+                <div id="email-error" class="error-message"  style="color: red;"></div> 
 
                 <label for="signup-password">Password:</label>
                 <input type="password" id="signup-password" name="password" required>
+                <div id="password-error" class="error-message" style="color: red;"></div>
+                
                 <button type="submit">Sign Up</button>
             </form>
 
             <p id="login-signup-link">Already have an account? <a href="/login" class="login-link">Login here</a>.</p>
         </main>
     </div>
-</body>
+</body>   
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('signup-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+    
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+    
+            try {
+                const response = await fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                clearErrors(); 
+    
+                if (!response.ok) {
+                    const result = await response.json();
+                    if (result.errors) {
+                        result.errors.forEach(error => {
+                            const errorMsg = error.msg;
+                            if (error.path === 'username') {
+                                document.getElementById('username-error').innerText = errorMsg;
+                            } else if (error.path === 'email') {
+                                document.getElementById('email-error').innerText = errorMsg;
+                            } else if (error.path === 'password') {
+                                document.getElementById('password-error').innerText = errorMsg;
+                            }
+                        });
+                    } else if (result.error) { 
+                        document.getElementById('username-error').innerText = result.error;
+                    }
+                } else {
+                    console.log('Signed up!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    
+        function clearErrors() {
+            document.getElementById('username-error').innerText = '';
+            document.getElementById('email-error').innerText = '';
+            document.getElementById('password-error').innerText = '';
+        }
+    });
+</script>    
 </html>
