@@ -84,6 +84,26 @@ SESSION_SECRET=your_session_secret
 9.  Run 'npm start' on terminal - The application will be accessible at http://localhost:3000.
     
 
+## Running Tests
+
+This project uses [Jest](https://jestjs.io/) for testing.
+
+### Prerequisites
+Make sure you have the following installed:
+- Node.js (v14 or above)
+- npm or yarn
+
+### Running Tests
+
+To run the tests, use the following command:
+
+```bash
+npm test
+
+or if you are using yarn:
+yarn test
+
+
 Usage
 -----
 
