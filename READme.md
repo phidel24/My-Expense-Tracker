@@ -55,16 +55,33 @@ Follow these steps to set up and run the project locally:
 
 1.  git clone https://github.com/phidel24/My-Expense-Tracker.git
     
-2.  cd My-Expense-Tracker
+2.  cd My-Expense-Tracker 
     
 3.  npm install
-    
-4.  Create a .env file in the root directory with the following content:
+      
+## Setup your database: 
+4. Open your database client eg(postgres, MYSQL Workbench)
+
+5. Create a new database for the project (e.g., `my_expense_tracker`, `expense_tracker_db`)
+```sql
+   CREATE DATABASE expense_tracker_db;
+
+6. Run migrations to set up tables: npx sequelize-cli db:migrate
+
+7. Optionally, run seeders if you want some sample data: npx sequelize-cli db:seed:all
+
+8. Create a .env file in the root directory with the following content:
 codeDB\_HOST=localhostDB\_USER=your\_db\_userDB\_PASS=your\_db\_passwordDB\_NAME=my\_expense\_trackerSESSION\_SECRET=your\_session\_secret
+
+OR ```plaintext
+DB_HOST=localhost
+DB_USER=your_db_user
+DB_PASS=your_db_password
+DB_NAME=my_expense_tracker
+SESSION_SECRET=your_session_secret
+```
     
-5.  Ensure your database is running, then execute: npx sequelize-cli db:migrate
-    
-6.  npm start - The application will be accessible at http://localhost:3000.
+9.  Run 'npm start' on terminal - The application will be accessible at http://localhost:3000.
     
 
 Usage
@@ -136,6 +153,8 @@ Credits
     
 
 Special thanks to the tutorials and documentation provided by [Node.js](https://nodejs.org/), [Express](https://expressjs.com/), and [Sequelize](https://sequelize.org/).
+
+This project also utilizes OpenAI's ChatGPT to assist with some coding suggestions, organise/editing my documentation.
 
 License
 -------
