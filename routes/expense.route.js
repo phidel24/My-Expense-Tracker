@@ -3,8 +3,47 @@ const router = express.Router();
 const { getUserExpenses, addExpense, getExpenseById, updateExpense, deleteExpense } = require('../backend/controllers/expenseController');
 const { getCategories } = require('../backend/services/category.service');
 
+function authenticateUser(req, res, next) {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
 router.post('/add', addExpense);
-router.get('/expenses', getUserExpenses);
+router.get('/', getUserExpenses);
+
+router.get('/', authenticateUser, async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const userExpenses = await getUserExpenses(userId);
+        const totalAmount = userExpenses.reduce((total, expense) => {
+            console.log("Expense amount:", expense.amount, typeof expense.amount);
+            return total + expense.amount;
+        }, 0);
+
+        res.render('expenses', { user: req.session.user, expenses: userExpenses, totalAmount: totalAmount });
+    } catch (error) {
+        console.error('Error fetching expenses:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+router.get('/addExpense', authenticateUser, async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const categoriesInstances = await getCategories();
+        const categories = categoriesInstances.map(category => ({
+            id: category.id,
+            name: category.name
+        }));
+        res.render('addExpense', { categories, userId });
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // Edit expense route
 router.get('/edit/:id', async (req, res) => {

@@ -6,8 +6,6 @@ const sequelize = require('./backend/database/models/index');
 const authRoutes = require('./routes/auth.route');
 const expenseRoutes = require('./routes/expense.route');
 const getUsers = require('./backend/services/user.service');
-const { getUserExpenses, addExpense } = require('./backend/services/expense.service');  // Correctly import functions
-const {getCategories} = require('./backend/services/category.service');
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -42,47 +40,6 @@ app.get('/users', async (req, res) => {
         res.render('users', { users: users });
     } catch (error) {
         console.error('Error fetching users:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-function authenticateUser(req, res, next) {
-    if (req.session.user) {
-        next();
-    } else {
-        res.render('login');
-    }
-}
-
-app.get('/expenses', authenticateUser, async (req, res) => {
-    try {
-        const userId = req.session.user.id;
-        const userExpenses = await getUserExpenses(userId);
-        const totalAmount = userExpenses.reduce((total, expense) => {
-            console.log("Expense amount:", expense.amount, typeof expense.amount);
-            return total + expense.amount;
-        }, 0);
-        console.log("logging the amount for confirmation: ", totalAmount);
-        console.log("logging the type for confirmation: ", typeof totalAmount);
-
-        res.render('expenses', { user: req.session.user, expenses: userExpenses, totalAmount: totalAmount });
-    } catch (error) {
-        console.error('Error fetching expenses:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-app.get('/addExpense', authenticateUser, async (req, res) => {
-    try {
-        const userId = req.session.user.id;
-        const categoriesInstances = await getCategories();
-        const categories = categoriesInstances.map(category => ({
-            id: category.id,
-            name: category.name
-        }));
-        res.render('addExpense', { categories, userId });
-    } catch (error) {
-        console.error('Error fetching categories:', error);
         res.status(500).send('Internal Server Error');
     }
 });
