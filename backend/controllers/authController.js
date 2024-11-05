@@ -75,11 +75,11 @@ const userLogin = async (req, res) => {
             return res.status(401).json({ error: "Incorrect password" });
         }
 
-        // Store userId and user object in session
         req.session.userId = user.id;  
-        req.session.user = { id: user.id, username: user.username, email: user.email }; // Store necessary user info
+        req.session.user = { id: user.id, username: user.username, email: user.email };
 
         console.log("Login successful");
+        console.log("Session after login:", req.session); 
         return res.json({ message: "Login successful" });
 
     } catch (error) {
