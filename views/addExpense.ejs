@@ -32,7 +32,7 @@
                     <option value="addNewCategory">Add New Category</option>
                 </select>
     
-                <div id="new-category" style="display: none;">
+                <div id="new-category" style="display: none; height: 30px;">
                     <label for="new-category-input">New Category:</label> 
                     <input type="text" id="new-category-input" name="category" >
                 </div>
@@ -67,12 +67,9 @@
                 success: function(response) {
                     if ($('.successMsg').length === 0) {
                         $('<div class="successMsg">Expense added successfully!</div>')
-                        .appendTo('body')
-                        .css({
-                            display: 'none'
-                        });
+                        .appendTo('#create-expense-div');
                     }
-                    $('.successMsg').show().delay(2000).fadeOut();
+                    $('.successMsg').fadeIn().delay(2000).fadeOut();
                     setTimeout(function() {
                         window.location.href = '/expenses';
                     }, 2000);

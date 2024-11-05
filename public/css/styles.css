@@ -38,6 +38,8 @@ body {
 }
 #exp-tracker-container {
     border-radius: 20px;
+    max-height: 750px;
+    overflow-y: auto;
 }
 
 #login-container, #signup-container {
@@ -47,6 +49,7 @@ body {
 
 #expense-container {
     width: 450px;
+    border-radius: 16px;
 }
 
 h1 {
@@ -67,19 +70,38 @@ h1 {
 #expense-form input, #signup input, #login-form input, .select-cat, .edit-input-descr {
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
+    height: 30px;
+    box-shadow: 0.2px 0.2px;
+}
+
+#expense-form #expense-category {
+    height: calc(2.0em + .75rem + 2px);
+    padding: .375rem 1.75rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    vertical-align: middle;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#create-expense-div {
+    margin: 15px 0;
 }
 
 #expense-form button, #login-form button, #signup-form button {
-    width: 50%;
+    width: 45%;
     padding: 10px;
     background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    margin: 10px auto;
-    float: right;
+    margin: auto 10px;
+    height: 50px;
+    font-size: large;
 }
 
 footer.footer {
