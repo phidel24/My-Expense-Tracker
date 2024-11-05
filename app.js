@@ -1,5 +1,4 @@
 require('dotenv').config();
-console.log("Session secret:", process.env.SESSION_SECRET);
 const express = require('express');
 const app = express();
 const session = require('express-session');
@@ -14,14 +13,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
     store: new SequelizeStore({
-      db: sequelize
+        db: sequelize
     }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    // cookie: { secure: process.env.NODE_ENV === 'production' }
-    cookie: { secure: false }
-  }));
+    cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
 
 app.use(express.static('public'));
 app.set('views', path.join(__dirname, 'views'));
@@ -52,7 +50,7 @@ app.get('/users', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 sequelize.sync().then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
