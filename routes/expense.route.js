@@ -12,7 +12,7 @@ function authenticateUser(req, res, next) {
 }
 
 router.post('/add', addExpense);
-router.get('/', getUserExpenses);
+router.get('/', authenticateUser, getUserExpenses);
 
 router.get('/', authenticateUser, async (req, res) => {
     try {
@@ -63,7 +63,7 @@ router.get('/edit/:id', async (req, res) => {
 router.post('/edit/:id', async (req, res) => {
     const expenseId = req.params.id;
     const { title, amount, categoryId, description } = req.body;
-    
+
     try {
         await updateExpense(expenseId, title, amount, categoryId, description);
         res.redirect('/expenses?message=Expense updated successfully!');

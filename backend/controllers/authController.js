@@ -32,15 +32,22 @@ async function userSignup(req, res) {
         const existingEmail = await User.findOne({ where: { email } });
 
         if (existingUser) {
-            return res.status(400).json({ error: 'Username already exists.' }); // Sending a single error object
+            return res.status(400).json({ error: 'Username already exists.' });
         }
         if (existingEmail) {
-            return res.status(400).json({ error: 'Email already exists.' }); // Sending a single error object
+            return res.status(400).json({ error: 'Email already exists.' }); 
         }
+
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const newUser = await User.create({ username, email, password: hashedPassword });
-        
-        res.status(201).json({ message: 'User created successfully' });
+
+        req.session.user = {
+            id: newUser.id,
+            username: newUser.username,
+            email: newUser.email,
+        };
+
+        res.redirect('/expenses'); 
     } catch (error) {
         console.error('Error signing up:', error);
         res.status(500).json({ errors: [{ msg: 'Server error, please try again later.' }] });
